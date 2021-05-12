@@ -1,0 +1,1 @@
+{{ $farmer->county->county_name }}

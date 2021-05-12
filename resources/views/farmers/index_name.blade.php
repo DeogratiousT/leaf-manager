@@ -1,0 +1,1 @@
+{{ $farmer->first_name }} {{ $farmer->middle_name }} {{ $farmer->last_name }}

@@ -1,0 +1,71 @@
+extend type Query {
+    markets: [Station!]! @middleware(checks: ["auth:sanctum"]) @all
+    farmers: [Farmer!]! @middleware(checks: ["auth:sanctum"]) @all
+    grades: [Grade!]! @middleware(checks: ["auth:sanctum"]) @all
+    tobaccotypes: [Tobaccotype!]! @middleware(checks: ["auth:sanctum"]) @all
+    stores: [Store!]! @middleware(checks: ["auth:sanctum"]) @all
+    trucks: [Lorry!]! @middleware(checks: ["auth:sanctum"]) @all
+}
+
+type Station {
+    id: ID!
+    name: String!
+    location: String!
+}
+
+type Farmer{
+    id: ID!
+    serial: String!
+    first_name: String!
+    middle_name: String!
+    last_name: String!
+    id_number: Int!
+    mobile_number: Int!
+    acrerage: Int!
+    town: String!
+    region: Region @belongsTo
+    cropyear: Cropyear @belongsTo
+}
+
+type County{
+    id: ID!
+    county_code: Int!
+    county_name: String!
+    country: String!
+}
+
+type Region{
+    id: ID!
+    region_name: String!
+    county: County @belongsTo
+}
+
+type Cropyear{
+    id: ID!
+    slug_name: String!
+    from_date: String!
+    to_date: String!
+}
+
+type Grade{
+    id: ID!
+    grade_name: String!
+    tobaccotype: Tobaccotype @belongsTo
+}
+
+type Tobaccotype{
+    id: ID!
+    type_name: String!
+}
+
+type Store{
+    id: ID!
+    name: String!
+    description: String!
+}
+
+type Lorry{
+    id: ID!
+    model: String!
+    plate_number: String!
+}

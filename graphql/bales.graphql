@@ -1,0 +1,81 @@
+input balereceptionInput {  
+    station_id: Int!
+    store_id: Int!
+    farmer_id: Int!
+    number_of_bales: Int!
+    officer: String!
+}
+
+input baleInput { 
+    balereception_id: Int!
+    number: String!
+    grade_id: Int!
+    weight_at_reception: FloatType!
+    farmer_id: Int!
+    creation_date: Date!
+}
+
+input loadBaleInput {  
+    bale_id: Int!
+    lorry_id: Int!
+    weight_at_loading: FloatType!
+    tdrf_number: String!
+    loading_date: Date!
+}
+
+input offLoadBaleInput {  
+    bale_id: Int!
+    weight_at_off_loading: FloatType!
+    off_loading_date: Date!
+}
+
+type BalereceptionResponse {
+    balereception: Balereception
+}
+
+type BaleResponse {
+    bale: Bale
+}
+
+type Balereception{
+    id: ID!
+    farmer: Farmer @belongsTo
+    market: Station @belongsTo(relation: "station")
+    store: Store @belongsTo
+    number_of_bales: String
+    officer: String
+}
+
+type Bale{
+    id: ID!
+    number: String!
+    grade: Grade @belongsTo
+    balereception: Balereception @belongsTo
+    weight_at_reception: FloatType
+    weight_at_loading: FloatType
+    weight_at_off_loading: FloatType
+    weight_at_processing: FloatType
+    state: String
+    tdrf_number: String
+    creation_date: Date
+    loading_date: Date
+    off_loading_date: Date
+    lorry: Lorry @belongsTo
+}
+
+extend type Mutation {
+    createBalereception(input: balereceptionInput @spread): BalereceptionResponse! @field(resolver: "Bales\\CreateBalereception")
+
+    createBale(input: baleInput @spread): BaleResponse! @field(resolver: "Bales\\CreateBale") @middleware(checks: ["auth:sanctum"])
+    
+    loadBale(input: loadBaleInput @spread): BaleResponse! @field(resolver: "Bales\\LoadBale") @middleware(checks: ["auth:sanctum"])
+    
+    offLoadBale(input: offLoadBaleInput @spread): BaleResponse! @field(resolver: "Bales\\OffLoadBale") @middleware(checks: ["auth:sanctum"])
+}
+
+extend type Query{
+    allBales: [Bale!]! @middleware(checks: ["auth:sanctum"]) @all
+    bale(id: ID @eq): Bale @middleware(checks: ["auth:sanctum"]) @find
+
+    balesByState(state: String! @where(operator: "like")): [Bale!]! @middleware(checks: ["auth:sanctum"]) @all
+}
