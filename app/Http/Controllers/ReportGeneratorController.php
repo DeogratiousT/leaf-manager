@@ -8,6 +8,7 @@ use App\Models\Farmerinput;
 use App\Models\Cropyear;
 use App\Models\Unit;
 use App\Models\Bale;
+use App\Models\Station;
 use PdfReport;
 use ExcelReport;
 use Illuminate\Support\Facades\DB;
@@ -291,5 +292,36 @@ class ReportGeneratorController extends Controller
                         'class' => 'left'
                     ])
                     ->download('bales'); // other available method: download('filename') to download pdf / make() that will producing DomPDF / SnappyPdf instance so you could do any other DomPDF / snappyPdf method such as stream() or download()
+    }
+
+    public function balesinmarketpdf($id)
+    {
+        $station = Station::find($id);
+
+        $title = 'All Bales Bought at '.$station->name.' Report';
+
+        $meta = [
+            'Generated' => Carbon::now()
+        ];
+
+        $queryBuilder  = $station->bales();
+
+        $columns = [
+            'Number' => 'number',
+            'Grade' => function($result) { 
+                return (isset($result->grade->grade_name) ?  $result->grade->grade_name : null);
+            },
+            'Reception Weight' => 'weight_at_reception',
+            'Status' => 'state',            
+            'Buying Date' => function($result) { 
+                return $result->created_at;
+            },
+        ];
+
+        return PdfReport::of($title, $meta, $queryBuilder, $columns)
+                    ->editColumns(['Number', 'Grade'], [ // Mass edit column
+                        'class' => 'left'
+                    ])
+                    ->download('bales-bought-at'.$station->name); // other available method: download('filename') to download pdf / make() that will producing DomPDF / SnappyPdf instance so you could do any other DomPDF / snappyPdf method such as stream() or download()
     }
 }

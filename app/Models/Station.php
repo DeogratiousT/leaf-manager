@@ -17,4 +17,9 @@ class Station extends Model
     {
         return $this->belongsTo('App\Models\Region');
     }
+
+    public function bales()
+    {
+        return $this->hasManyThrough('App\Models\Bale', 'App\Models\Balereception', 'station_id', 'balereception_id', 'id', 'id');
+    }
 }

@@ -1,4 +1,4 @@
-<a href="{{ route('stations.show', $station) }}" class="action-icon" data-toggle="tooltip" data-placement="bottom" title="View Station"> <i class="mdi mdi-eye"></i></a>
+<a href="{{ route('all-bales-in-market-pdf', $station) }}" class="action-icon" data-toggle="tooltip" data-placement="bottom" title="Export all Bales in this Station"> <i class="mdi mdi-file-export"></i></a>
 
 <a href="{{ route('stations.edit', $station) }}" class="action-icon" data-toggle="tooltip" data-placement="bottom" title="Edit Station"> <i class="mdi mdi-square-edit-outline"></i></a>
 

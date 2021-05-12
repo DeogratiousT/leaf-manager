@@ -63,6 +63,8 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('all-bales/pdf','ReportGeneratorController@allbalespdf')->name('all-bales-pdf');
 
+    Route::get('market/{id}/allbalespdf','ReportGeneratorController@balesinmarketpdf')->name('all-bales-in-market-pdf');
+
     Route::get('farmer/{farmer}/activity','ReportGeneratorController@farmeractivitypdf')->name('farmer-activity');
 
     Route::get('cropyear/{croyear}/farmers/pdf','ReportGeneratorController@cropyearfarmerspdf')->name('cropyear-farmers-pdf');
