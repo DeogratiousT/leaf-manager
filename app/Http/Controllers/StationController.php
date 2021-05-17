@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Station;
 use App\Models\Region;
+use App\Models\Grade;
 use Illuminate\Http\Request;
 use Freshbitsweb\Laratables\Laratables;
 use App\Laratables\StationsLaratables;
@@ -17,11 +18,14 @@ class StationController extends Controller
      */
     public function index()
     {
+        $grades = Grade::all();
+        $stations = Station::all();
+
         if (request()->ajax()) {
             return Laratables::recordsOf(Station::class, StationsLaratables::class);
         }
 
-        return view('stations.index');
+        return view('stations.index',['stations'=>$stations, 'grades'=>$grades]);
     }
 
     /**

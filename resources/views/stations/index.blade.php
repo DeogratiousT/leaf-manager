@@ -23,6 +23,36 @@
                 </tr>
             </thead>
         </table>
+
+        @foreach ($stations as $station)
+            <div id="station-{{ $station->id }}-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="standard-modalLabel">{{ $station->name }} Inventory</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="list-group">
+                                @foreach ($grades as $grade)
+                                    <li class="list-group-item"><i class="uil-star mr-1"></i> {{ $grade->grade_name }} :   @php
+                                            $load = 0;
+                                            $sbales = $station->bales->where('grade_id',$grade->id);
+                                            foreach ($sbales as $sbale) {
+                                                $load += $sbale->weight_at_reception;
+                                                $load -= $sbale->weight_at_loading;
+                                                $load -= $sbale->weight_at_off_loading;
+                                            }
+                                            echo $load;
+                                        @endphp
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        @endforeach
         
         <script>
             $(document).ready(function(){
@@ -31,7 +61,7 @@
                     ajax: "{{ route('stations.index') }}",
                     columns: [
                         { name: 'name' },
-                        { name: 'region.region_name' },
+                        { name: 'region.region_name' , orderable: false },
                         { name: 'action' , orderable: false, searchable: false }                              
                     ]
                 });
