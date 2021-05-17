@@ -41,13 +41,22 @@
                                             foreach ($sbales as $sbale) {
                                                 $load += $sbale->weight_at_reception;
                                                 $load -= $sbale->weight_at_loading;
-                                                $load -= $sbale->weight_at_off_loading;
                                             }
-                                            echo $load;
+                                            echo $load. ' KGs';
                                         @endphp
                                     </li>
                                 @endforeach
                             </ul>
+                            <h5>Total : 
+                                @php
+                                    $tsbales = 0;
+                                    foreach ($station->bales as $tsbale) {
+                                        $tsbales += $tsbale->weight_at_reception;
+                                        $tsbales -= $tsbale->weight_at_loading;
+                                    }
+                                    echo $tsbales . ' KGs';
+                                @endphp
+                            </h5>
                         </div>
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
